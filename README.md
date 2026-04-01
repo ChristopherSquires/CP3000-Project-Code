@@ -58,6 +58,60 @@ CP3000-Project-Code/
 
 ## Quick Start
 
+### Windows users – enable Long Path support first
+
+TensorFlow ships header files nested in very deep sub-directories.
+On Windows the default `MAX_PATH` limit (260 characters) is too short for
+those paths when the project lives somewhere like
+`C:\Users\<name>\Desktop\CP3000-Project-Code\…`.
+You will see an error like:
+
+```
+OSError: [Errno 2] No such file or directory: '…\client_side_weighted_round_robin.upb_minitable.h'
+HINT: This error might have occurred since this system does not have Windows Long Path support enabled.
+```
+
+**Option A – automated setup script (recommended)**
+
+Run the provided helper from an *elevated* (Administrator) command prompt.
+It enables Long Path support, creates the virtual environment at a short path
+(`C:\cp3000\.venv`), and installs all dependencies:
+
+```bat
+setup_windows.bat
+```
+
+Then activate the environment and run the app:
+
+```bat
+C:\cp3000\.venv\Scripts\activate
+streamlit run app.py
+```
+
+**Option B – manual steps**
+
+1. Enable Long Paths via an elevated PowerShell:
+   ```powershell
+   New-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\FileSystem" `
+       -Name LongPathsEnabled -Value 1 -PropertyType DWORD -Force
+   ```
+   Then **reboot** to activate the change.
+
+2. Clone the repo to a short base path, e.g.:
+   ```bat
+   git clone <repo-url> C:\cp3000\src
+   cd C:\cp3000\src
+   ```
+
+3. Create the virtual environment at a short path:
+   ```bat
+   python -m venv C:\cp3000\.venv
+   C:\cp3000\.venv\Scripts\activate
+   pip install -r requirements.txt
+   ```
+
+---
+
 ### 1 · Clone & install dependencies
 
 ```bash
